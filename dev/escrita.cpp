@@ -60,7 +60,7 @@ int main(){
 		cout << palavras_comeco << endl;
 		
 		// Teste: leitura e escrita das 10 primeiras linhas (linhas 2 até 11). Futuramente: criar funções que realizem o processo de leitura, em vez de 1 por 1 no main
-		ofstream arq_binario("dados_convertidos.bin");
+		ofstream arq_binario("dados_convertidos.bin", ios::binary);
 		
 		// 357407 real tamanho, verificar depois se esse tamanho procede
 		CSV *linhas = new CSV[10];	// 5263
