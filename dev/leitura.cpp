@@ -36,7 +36,7 @@ CSV::CSV(){
 
 int main(){
 	
-	ifstream arq("dados_convertidos.bin");
+	ifstream arq("dados_convertidos.bin", ios::binary);
 	
 	if(arq){
 		
