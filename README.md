@@ -8,3 +8,5 @@ Pontos importantes:
 
 1) Por algum motivo, converter de .csv para .bin no windows dá errado, 
 no linux eu consegui ir até certo ponto, mas dava errado o resto por uma implementação que ainda iria fazer
+
+Resolvido: no windows tem que colocar o ios::binary ao criar o arquivo, para especificar que o arquivo deve ser escrito/lido em binário.
