@@ -7,7 +7,7 @@ using namespace std;
 struct CSV{
 	
 	int campo_1_id;
-	char campo_2_name[54];
+	char campo_2_name[40];
 	char campo_3_job[54];
 	float campo_4_base_pay;
 	float campo_5_overtime_pay;
