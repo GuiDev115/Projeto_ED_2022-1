@@ -9,9 +9,10 @@ class arquivo_CSV{
 	
 	private:
 		int campo_1_id;
-		// Feito um teste prévio, sabe-se que a maior string que o arquivo CSV possui é de 52 caracteres
-		// Logo cada campo tem 52 + 1 (caractere fim da string: \0) = 53, mas arredonda-se para 54
-		char campo_2_name[54];
+		// Feito um teste prévio, sabe-se que:
+		// o maior tamanho do campo do nome tem 39 + 1 (caractere fim da string: \0) = 40
+		// e o maior tamanho do campo do emprego tem 52 + 1 (caractere fim da string: \0) = 53, mas arredonda-se para 54
+		char campo_2_name[40];
 		char campo_3_job[54];
 		float campo_4_base_pay;
 		float campo_5_overtime_pay;
