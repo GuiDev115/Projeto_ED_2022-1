@@ -4,7 +4,7 @@ Por ser muito grande o arquivo .csv que estamos trabalhando, ele está disponív
 
 Sendo o que foi escolhido: san_francisco_payroll_dataset.csv
 
-O arquivo binário é igualmente grande para ser postado aqui, logo pode ser acessado pelo link: https://drive.google.com/file/d/1jb9453oBioO4gt9QGU5d7szspVFyrCSR/view?usp=sharing
+Para acessar o arquivo binário, basta executar o programa de escrita que está devidamente funcional.
 
 Pontos importantes:
 
