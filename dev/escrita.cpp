@@ -4,7 +4,7 @@
 
 using namespace std;
 
-// Classe que representa cada linha do arquivo CSV, tamanho : 140 bytes
+// Classe que representa cada linha do arquivo CSV, tamanho : 132 bytes
 class arquivo_CSV{
 	
 	private:
@@ -21,6 +21,7 @@ class arquivo_CSV{
 		float campo_8_total_pay;
 		float campo_9_total_pay_benefits;
 		int campo_10_year;
+		int campo_11_posicao;
 		
 	public:
 		arquivo_CSV();
@@ -28,6 +29,7 @@ class arquivo_CSV{
 		void escrita_char(ifstream& umArquivo, arquivo_CSV& umaLinha, int seletor);
 		void escrita_pagamentos(ifstream& umArquivo, arquivo_CSV& umaLinha, int seletor);
 		void escrita_ano(ifstream& umArquivo, arquivo_CSV& umaLinha);
+		void escrita_posicao(arquivo_CSV& umaLinha, int& pos);
 };
 
 // Construtor
@@ -47,6 +49,7 @@ arquivo_CSV::arquivo_CSV(){
 	campo_8_total_pay = 0;
 	campo_9_total_pay_benefits = 0;
 	campo_10_year = 0;
+	campo_11_posicao = -1;
 }
 
 // Função para ler e escrever o id (campo 1) em binário
@@ -246,6 +249,15 @@ void arquivo_CSV::escrita_ano(ifstream& umArquivo, arquivo_CSV& umaLinha){
 	umaLinha.campo_10_year = ano;
 }
 
+// Função para escrever a posição de uma linha em binário
+// Tal valor será utilizado futuramente para outras operações
+void arquivo_CSV::escrita_posicao(arquivo_CSV& umaLinha, int& pos){
+	
+	umaLinha.campo_11_posicao = pos;
+	
+	pos++;
+}
+
 // Função para simular uma barra de progresso da conversão em CSV para binário. 
 // Fonte: https://stackoverflow.com/questions/14539867/how-to-display-a-progress-indicator-in-pure-c-c-cout-printf
 void progressbar(float &progresso){
@@ -306,6 +318,7 @@ int main(){
 		// Um ponteiro é criado para ler cada linha do arquivo CSV
 		// O tamanho do ponteiro foi determinado previamente, olhando o número de total de Ids do arquivo CSV + 1
 		arquivo_CSV *linhas = new arquivo_CSV[357407];
+		int pos = 0;
 		
 		// Variáveis para para preencher a barra de progresso
 		float progresso = 0;
@@ -335,6 +348,8 @@ int main(){
 			}
 			
 			dados_csv.escrita_ano(arq, linhas[i]);
+			
+			dados_csv.escrita_posicao(linhas[i], pos);
 			
 			// Progressão da barra
 			if(porcento == (i / divisor)){
