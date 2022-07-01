@@ -16,6 +16,7 @@ struct CSV{
 	float campo_8_total_pay;
 	float campo_9_total_pay_benefits;
 	int campo_10_year;
+	int campo_11_posicao;
 	
 	CSV();
 };
@@ -32,6 +33,7 @@ CSV::CSV(){
 	campo_8_total_pay = 0;
 	campo_9_total_pay_benefits = 0;
 	campo_10_year = 0;
+	campo_11_posicao = -1;
 };
 
 int main(){
@@ -42,10 +44,10 @@ int main(){
 		
 		CSV leitura[30];
 		
-		arq.seekg(140*357400, arq.beg);
+		arq.seekg(sizeof(CSV)*300000, arq.beg);
 		
-		//arq.read((char*)(&leitura), 10*sizeof(CSV));
-		arq.read((char*)(&leitura), sizeof(leitura));
+		arq.read((char*)(&leitura), 10*sizeof(CSV));
+		// ou arq.read((char*)(&leitura), sizeof(leitura));
 		
 		for(int i = 0; i < 10; i++){
 			
@@ -58,7 +60,8 @@ int main(){
 			<< leitura[i].campo_7_benefits << '\n'
 			<< leitura[i].campo_8_total_pay << '\n'
 			<< leitura[i].campo_9_total_pay_benefits << '\n'
-			<< leitura[i].campo_10_year << '\n' << endl;
+			<< leitura[i].campo_10_year << '\n'
+			<< leitura[i].campo_11_posicao << '\n' << endl;
 		}
 		
 		cout << sizeof(CSV) << " bytes" << endl;
