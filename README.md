@@ -16,10 +16,12 @@ Resolvido: no windows tem que colocar o ios::binary ao criar o arquivo, para esp
 ################################################
 
 Em um programa:
-	adicionar um elemento em uma posição especifica
-	vizualizar de um ponto a outro
-	alterar os dados de certo elemento
-	trocar 2 registros de posição (criar int pos)
+1) adicionar um elemento em uma posição especifica
+2) vizualizar de um ponto a outro
+3) alterar os dados de certo elemento
+4) trocar 2 registros de posição (criar int pos)
+
 Outro programa:
-	imprimir TUDO
+1) imprimir TUDO
+
 Criar um main que puxa tudo
