@@ -4,7 +4,7 @@
 
 using namespace std;
 
-struct CSV{
+struct Binario{
 	
 	int campo_1_id;
 	char campo_2_name[40];
@@ -18,10 +18,10 @@ struct CSV{
 	int campo_10_year;
 	int campo_11_posicao;
 	
-	CSV();
+	Binario();
 };
 
-CSV::CSV(){
+Binario::Binario(){
 	
 	campo_1_id = -1;
 	memset(campo_2_name, 0, sizeof(campo_2_name));
@@ -42,14 +42,18 @@ int main(){
 	
 	if(arq){
 		
-		CSV leitura[30];
+		arq.seekg(0, arq.end);
+		int tamanho_arquivo_binario = arq.tellg();
 		
-		arq.seekg(sizeof(CSV)*300000, arq.beg);
+		int quantidade = tamanho_arquivo_binario / sizeof(Binario);
 		
-		arq.read((char*)(&leitura), 10*sizeof(CSV));
-		// ou arq.read((char*)(&leitura), sizeof(leitura));
+		Binario *leitura = new Binario[quantidade];
 		
-		for(int i = 0; i < 10; i++){
+		arq.seekg(0, arq.beg);
+		
+		for(int i = 0; i < quantidade; i++){
+			
+			arq.read((char*)(&leitura[i]), sizeof(Binario));
 			
 			cout << leitura[i].campo_1_id << '\n'
 			<< leitura[i].campo_2_name << '\n'
@@ -64,15 +68,8 @@ int main(){
 			<< leitura[i].campo_11_posicao << '\n' << endl;
 		}
 		
-		cout << sizeof(CSV) << " bytes" << endl;
-		
-		arq.clear();
-		arq.seekg(0, arq.end);
-		int tam = arq.tellg();
-		
-		cout << tam << " bytes" << endl;
-		
 		arq.close();
+		delete[] leitura;
 	}
 	
 	return 0;
