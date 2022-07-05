@@ -39,6 +39,8 @@ Binario::Binario(){
 
 int main(){
 	
+	int erro = 0;
+	
 	ifstream arq("dados_convertidos.bin", ios::binary);
 	
 	if(arq){
@@ -62,9 +64,9 @@ int main(){
 		
 		aux = sizeof(Binario)*inicial_pos;
 		
-		if((inicial_pos < 0) or (aux > tamanho_arquivo_binario))
-			cout << "Posição inicial inválida" << endl;
-			
+		if((inicial_pos < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
+			erro = 1;
+		
 		else{
 			
 			cout << "Escreva a posição final: " << endl;
@@ -73,9 +75,9 @@ int main(){
 			
 			aux = sizeof(Binario)*fim_pos;
 			
-			if((fim_pos < inicial_pos) or (fim_pos < 0) or (aux > tamanho_arquivo_binario))
-				cout << "Posição final inválida" << endl;
-				
+			if((fim_pos < inicial_pos) or (fim_pos < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
+				erro = 1;
+			
 			else{
 				
 				int intervalo = fim_pos - inicial_pos + 1;
@@ -153,5 +155,5 @@ int main(){
 		cout << "Não há arquivo convertido" << endl;
 	}
 	
-	return 0;
+	return erro;
 }
