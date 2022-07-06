@@ -11,7 +11,7 @@ class arquivo_CSV{
 		int campo_1_id;
 		// Feito um teste prévio, sabe-se que:
 		// o maior tamanho do campo do nome tem 39 + 1 (caractere fim da string: \0) = 40
-		// e o maior tamanho do campo do emprego tem 52 + 1 (caractere fim da string: \0) = 53, mas arredonda-se para 54
+		// e o maior tamanho do campo do emprego tem 52 + 1 (caractere fim da string: \0) = 53, arredonda-se para 54
 		char campo_2_name[40];
 		char campo_3_job[54];
 		float campo_4_base_pay;
@@ -25,7 +25,7 @@ class arquivo_CSV{
 		
 	public:
 		arquivo_CSV();
-		void escrita_id(ifstream& arq, arquivo_CSV& umaLinha);
+		void escrita_id(ifstream& umArquivo, arquivo_CSV& umaLinha);
 		void escrita_char(ifstream& umArquivo, arquivo_CSV& umaLinha, int seletor);
 		void escrita_pagamentos(ifstream& umArquivo, arquivo_CSV& umaLinha, int seletor);
 		void escrita_ano(ifstream& umArquivo, arquivo_CSV& umaLinha);
@@ -303,13 +303,8 @@ int main(){
 	
 	if(arq){
 		
-		arquivo_CSV dados_csv;
-		string palavras_comeco;
-		
-		// Dá a certeza que o arquivo CSV será lido na linha 1
-		arq.seekg(0, arq.beg);
-		
 		// Lê a linha 1 do arquivo CSV que será descartada
+		string palavras_comeco;
 		getline(arq, palavras_comeco);
 		
 		// Cria ou sobrescreve o arquivo: dados_convertidos.bin
@@ -329,11 +324,11 @@ int main(){
 			
 			int cont = 1;
 			
-			dados_csv.escrita_id(arq, linhas[i]);
+			linhas[i].escrita_id(arq, linhas[i]);
 			
 			for(int j = 0; j < 2; j++){
 				
-				dados_csv.escrita_char(arq, linhas[i], cont);
+				linhas[i].escrita_char(arq, linhas[i], cont);
 				
 				cont++;
 			}
@@ -342,14 +337,14 @@ int main(){
 			
 			for(int j = 0; j < 6; j++){
 				
-				dados_csv.escrita_pagamentos(arq, linhas[i], cont);
+				linhas[i].escrita_pagamentos(arq, linhas[i], cont);
 				
 				cont++;
 			}
 			
-			dados_csv.escrita_ano(arq, linhas[i]);
+			linhas[i].escrita_ano(arq, linhas[i]);
 			
-			dados_csv.escrita_posicao(linhas[i], pos);
+			linhas[i].escrita_posicao(linhas[i], pos);
 			
 			// Progressão da barra
 			if(porcento == (i / divisor)){
@@ -365,10 +360,14 @@ int main(){
 		arq.close();
 		arq_binario.close();
 		delete[] linhas;
+		
+		cout << '\n' << "Conversão realizada, aperte enter para continuar. . . ";
+		
+		cin.get();
 	}
 	
 	else
-		cout << "Por favor, insira o arquivo escolhido ao grupo (san_francisco_payroll_dataset.csv) e reabra o programa." << endl;
+		cout << "Por favor, insira o arquivo escolhido ao grupo (san_francisco_payroll_dataset.csv) na pasta e reabra o programa." << endl;
 	
 	return 0;
 }
