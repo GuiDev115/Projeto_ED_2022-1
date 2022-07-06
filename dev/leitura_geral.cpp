@@ -5,21 +5,24 @@
 
 using namespace std;
 
-struct Binario{
+class Binario{
 	
-	int campo_1_id;
-	char campo_2_name[40];
-	char campo_3_job[54];
-	float campo_4_base_pay;
-	float campo_5_overtime_pay;
-	float campo_6_other_pay;
-	float campo_7_benefits;
-	float campo_8_total_pay;
-	float campo_9_total_pay_benefits;
-	int campo_10_year;
-	int campo_11_posicao;
+	private:
+		int campo_1_id;
+		char campo_2_name[40];
+		char campo_3_job[54];
+		float campo_4_base_pay;
+		float campo_5_overtime_pay;
+		float campo_6_other_pay;
+		float campo_7_benefits;
+		float campo_8_total_pay;
+		float campo_9_total_pay_benefits;
+		int campo_10_year;
+		int campo_11_posicao;
 	
-	Binario();
+	public:
+		Binario();
+		void imprimir(Binario& umaLinha);
 };
 
 Binario::Binario(){
@@ -37,6 +40,21 @@ Binario::Binario(){
 	campo_11_posicao = -1;
 };
 
+void Binario::imprimir(Binario& umaLinha){
+	
+	cout << umaLinha.campo_1_id << '\n'
+	<< umaLinha.campo_2_name << '\n'
+	<< umaLinha.campo_3_job << '\n'
+	<< umaLinha.campo_4_base_pay << '\n'
+	<< umaLinha.campo_5_overtime_pay << '\n'
+	<< umaLinha.campo_6_other_pay << '\n'
+	<< umaLinha.campo_7_benefits << '\n'
+	<< umaLinha.campo_8_total_pay << '\n'
+	<< umaLinha.campo_9_total_pay_benefits << '\n'
+	<< umaLinha.campo_10_year << '\n'
+	<< umaLinha.campo_11_posicao << '\n' << endl;
+}
+
 int main(){
 	
 	ifstream arq("dados_convertidos.bin", ios::binary);
@@ -48,7 +66,8 @@ int main(){
 		
 		int quantidade_linhas = tamanho_arquivo_binario / sizeof(Binario);
 		
-		Binario *leitura = new Binario[quantidade_linhas];
+		Binario dados_binario;
+		Binario *leitura = new Binario[1];
 		
 		arq.seekg(0, arq.beg);
 		
@@ -65,19 +84,9 @@ int main(){
 			
 			for(int i = 0; i < cont; i++){
 				
-				arq.read((char*)(&leitura[i]), sizeof(Binario));
+				arq.read((char*)(&leitura[0]), sizeof(Binario));
 				
-				cout << leitura[i].campo_1_id << '\n'
-				<< leitura[i].campo_2_name << '\n'
-				<< leitura[i].campo_3_job << '\n'
-				<< leitura[i].campo_4_base_pay << '\n'
-				<< leitura[i].campo_5_overtime_pay << '\n'
-				<< leitura[i].campo_6_other_pay << '\n'
-				<< leitura[i].campo_7_benefits << '\n'
-				<< leitura[i].campo_8_total_pay << '\n'
-				<< leitura[i].campo_9_total_pay_benefits << '\n'
-				<< leitura[i].campo_10_year << '\n'
-				<< leitura[i].campo_11_posicao << '\n' << endl;
+				dados_binario.imprimir(leitura[0]);
 				
 				aux_quant--;
 			}
