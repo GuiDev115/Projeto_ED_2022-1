@@ -38,7 +38,7 @@ Binario::Binario(){
 	campo_9_total_pay_benefits = 0;
 	campo_10_year = 0;
 	campo_11_posicao = -1;
-};
+}
 
 void Binario::imprimir(Binario& umaLinha){
 	
@@ -51,8 +51,7 @@ void Binario::imprimir(Binario& umaLinha){
 	<< umaLinha.campo_7_benefits << '\n'
 	<< umaLinha.campo_8_total_pay << '\n'
 	<< umaLinha.campo_9_total_pay_benefits << '\n'
-	<< umaLinha.campo_10_year << '\n'
-	<< umaLinha.campo_11_posicao << '\n' << endl;
+	<< umaLinha.campo_10_year << '\n' << endl;
 }
 
 int main(){
