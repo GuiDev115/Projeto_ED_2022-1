@@ -10,9 +10,11 @@ class arquivo_CSV{
 	private:
 		int campo_1_id;
 		// Feito um teste prévio, sabe-se que:
-		// o maior tamanho do campo do nome tem 39 + 1 (caractere fim da string: \0) = 40
-		// e o maior tamanho do campo do emprego tem 52 + 1 (caractere fim da string: \0) = 53, arredonda-se para 54
-		char campo_2_name[40];
+		// no id 5074 do arquivo CSV tem-se o maior tamanho do campo do nome (39)
+		// e no id 322003 tem-se o maior tamanho do campo do emprego (52).
+		// Como 9 (soma campos int e float) * 4 + 39 + 52 = 127 bytes, 
+		// foi determinado que os campos de nome e trabalho fossem arredondados para 42 e 54, respectivamente
+		char campo_2_name[42];
 		char campo_3_job[54];
 		float campo_4_base_pay;
 		float campo_5_overtime_pay;
