@@ -24,6 +24,8 @@ int main(){
         break;
 
         case 2:{
+			
+			cin.ignore();
 
             ifstream arq_binario02("dados_convertidos.bin", ios::binary);
 	
