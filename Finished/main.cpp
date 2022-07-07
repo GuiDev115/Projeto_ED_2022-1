@@ -14,7 +14,7 @@ int main(){
     cout << "Seja Bem vindo !!!" << endl;
     cout << "Por Favor faca sua escolha para progredir no programa" << endl << endl;
 
-    cout << "1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao" >> endl;
+    cout << "1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao" << endl;
 
     cin >> n1;
 
