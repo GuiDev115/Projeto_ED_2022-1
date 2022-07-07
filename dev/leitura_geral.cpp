@@ -7,24 +7,6 @@
 
 using namespace std;
 
-// Função para impressão dos dados
-void Binario::imprimir(Binario& umaLinha){
-	
-	cout << umaLinha.campo_1_id << '\n'
-	<< umaLinha.campo_2_name << '\n'
-	<< umaLinha.campo_3_job << '\n'
-	<< umaLinha.campo_4_base_pay << '\n'
-	<< umaLinha.campo_5_overtime_pay << '\n'
-	<< umaLinha.campo_6_other_pay << '\n'
-	<< umaLinha.campo_7_benefits << '\n'
-	<< umaLinha.campo_8_total_pay << '\n'
-	<< umaLinha.campo_9_total_pay_benefits << '\n'
-	<< umaLinha.campo_10_year << '\n'
-	<< umaLinha.campo_11_posicao << '\n' << endl;
-	
-	#warning retire o campo posicao antes de entregar!
-}
-
 int main(){
 	
 	ifstream arq_binario("dados_convertidos.bin", ios::binary);

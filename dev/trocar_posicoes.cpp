@@ -6,33 +6,7 @@
 
 using namespace std;
 
-// Função para trocar duas linhas (pacote/bloco classe Binario) de posição
-void Binario::trocar(fstream& umArquivo, int p1, int p2){
-	
-	// Criação dos pacotes/blocos
-	Binario bloco_1;
-	Binario bloco_2;
-	
-	// Atribui-se à bloco_1 todos os elementos da 1ª posição
-	umArquivo.seekg(p1 * sizeof(Binario), umArquivo.beg);
-	umArquivo.read((char*)(&bloco_1), sizeof(Binario));
-	
-	// Atribui-se à bloco_2 todos os elementos da 2ª posição
-	umArquivo.seekg(p2 * sizeof(Binario), umArquivo.beg);
-	umArquivo.read((char*)(&bloco_2), sizeof(Binario));
-	
-	// Troca de posições
-	int aux_pos = bloco_1.campo_11_posicao;
-	bloco_1.campo_11_posicao = bloco_2.campo_11_posicao;
-	bloco_2.campo_11_posicao = aux_pos;
-	
-	// Escrita dos blocos/pacotes com posições alteradas
-	umArquivo.seekg(p1 * sizeof(Binario), umArquivo.beg);
-	umArquivo.write((char*)(&bloco_2), sizeof(Binario));
-	
-	umArquivo.seekg(p2 * sizeof(Binario), umArquivo.beg);
-	umArquivo.write((char*)(&bloco_1), sizeof(Binario));
-}
+
 
 int main(){
 	
