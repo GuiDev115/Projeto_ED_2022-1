@@ -8,7 +8,7 @@ class Binario{
 	
 	private:
 		int campo_1_id;
-		char campo_2_name[40];
+		char campo_2_name[42];
 		char campo_3_job[54];
 		float campo_4_base_pay;
 		float campo_5_overtime_pay;
