@@ -22,8 +22,13 @@ class Binario{
 	public:
 		Binario();
 		void imprimir(Binario& umaLinha);
+
         void trocar(fstream& umArquivo, int p1, int p2);
 		void leitura_geral();
+		int leitura_por_espaco(int erro03);
+		int troca_pos(int erro04);
+		int alterar(int erro05);
+		void alterar_campo(fstream& umArquivo, int pos, int opcao);
 };
 
 Binario::Binario(){
@@ -171,4 +176,399 @@ void Binario::leitura_geral(){
 
 	else
             cout << "Não há arquivo convertido." << endl;
+}
+
+int Binario::leitura_por_espaco(int erro03){
+	
+	        ifstream arq_binario03("dados_convertidos.bin", ios::binary);
+	
+	        if(arq_binario03){
+		
+		        // É atribuído para tamanho_arquivo_binario quantos bytes há no arquivo binário
+		        arq_binario03.seekg(0, arq_binario03.end);
+		        int tamanho_arquivo_binario = arq_binario03.tellg();
+		
+		        // Um ponteiro do tipo classe Binario é criado para ler as linhas desejadas do arquivo binário
+                Binario *leitura = new Binario[1];
+                
+                arq_binario03.seekg(0, arq_binario03.beg);
+                
+                // Variáveis para a execução das operações
+                int inicial_pos = -1;
+                int final_pos = -1;
+                long aux;
+                
+                cout << "Escreva a posição inicial: " << endl;
+                cin >> inicial_pos;
+                
+                // Tamanho da inicial_pos em relação ao início do arquivo binário,
+                // ou seja, representa o byte que a posição de inicial_pos começa
+                aux = sizeof(Binario) * inicial_pos;
+		
+                if((inicial_pos < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
+                    erro03 = 1;
+		
+                else{
+                    
+                    cout << "Escreva a posição final: " << endl;
+                    
+                    cin >> final_pos;
+                    
+                    // Tamanho da final_pos em relação ao início do arquivo binário,
+                    // ou seja, representa o byte que a posição de final_pos começa
+                    aux = sizeof(Binario) * final_pos;
+                    
+                    if((final_pos < inicial_pos) or (final_pos < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
+                        erro03 = 1;
+                    
+                    else{
+                        
+                        // Intervalo de leitura
+                        int intervalo = final_pos - inicial_pos + 1;
+                        
+                        arq_binario03.seekg(inicial_pos * sizeof(Binario), arq_binario03.beg);
+                        
+                        cout << '\n' << "Resultado: " << '\n' << '\n';
+                        
+                        bool primeiro = false;
+                        
+                        do{
+                            // É mostrado ao usuário 100 linhas por vez
+                            int cont = 100;
+                            
+                            // Ou menos que 100 linhas, caso o intervalo restante seja < cont
+                            if(intervalo >= 1 and intervalo < cont)
+                                cont = intervalo;
+                                
+                            // É lido uma linha de informações (um pacote da classe Binario) de cada vez
+                            // Tal pacote é "inserido" no ponteiro leitura para vizualização
+                            for(int i = 0; i < cont; i++, intervalo--){
+                                
+                                arq_binario03.read((char*)(&leitura[0]), sizeof(Binario));
+                                
+                                leitura[0].imprimir(leitura[0]);
+                            }
+                            
+                            cout << "Linhas restantes: " << intervalo << '\n';
+                            cout << "Se desejar ver os resultados do ponto anterior até esse ponto, rode para cima" << endl;
+                            
+                            if(intervalo != 0)
+                                cout << "Pressione enter para continuar. . . ";
+                                
+                            else
+                                cout << "Pressione enter para sair. . . ";
+                            
+                            // Ignora o primeiro enter
+                            if(!primeiro){
+                                
+                                cin.ignore();
+                                
+                                primeiro = true;
+                            }
+                            
+                            // O programa apenas irá continuar/parar após o usuário pressionar enter.
+                            // Tal laço é feito para impedir que a cada caractere que o usuário digite, 
+                            // o programa rode uma vez + quantidade de caracteres inseridos
+                            bool controle = true;
+                            while(controle){
+                                
+                                if(cin.get() == '\n')
+                                    controle = false;
+                            }
+                            
+                            // No linux apenas um clear não basta, tal razão de ter dois comandos iguais
+                            system("clear");
+                            system("clear");
+                            
+                        }while(intervalo != 0);
+                    }
+                }
+                arq_binario03.close();
+                delete[] leitura;
+            }
+            else
+                cout << "Não há arquivo convertido" << endl;
+            return erro03;
+}
+
+int Binario::troca_pos(int erro04){
+	// O arquivo binário é aberto tanto para entrada quanto saída de dados
+	        fstream arq_binario04("dados_convertidos.bin", ios::binary | ios::in | ios::out);
+	
+            // erro será o retorno do programa, que é tratado no programa principal
+            // Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
+            // Se erro = 2, os valores das posições são iguais
+            
+            if(arq_binario04){
+                
+                // É atribuído para tamanho_arquivo_binario quantos bytes há no arquivo binário
+                arq_binario04.seekg(0, arq_binario04.end);
+                int tamanho_arquivo_binario = arq_binario04.tellg();
+                
+                // É criado uma variável do tipo classe Binario para acessar a função de trocar
+                Binario dados_binario;
+                
+                // Variáveis para a execução das operações
+                int pos_primeira = -1;
+                int pos_segunda = -1;
+                long aux;
+                
+                cout << "Escreva a primeira posição da troca: " << endl;
+                cin >> pos_primeira;
+                
+                // Tamanho da pos_primeira em relação ao início do arquivo binário,
+                // ou seja, representa o byte que a posição de pos_primeira começa
+                aux = pos_primeira * sizeof(Binario);
+                
+                if((pos_primeira < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
+                    erro04 = 1;
+                    
+                else{
+                    
+                    cout << "Escreva a segunda posição da troca: " << endl;
+                    cin >> pos_segunda;
+                    
+                    // Tamanho da pos_segunda em relação ao início do arquivo binário,
+                    // ou seja, representa o byte que a posição de pos_segunda começa
+                    aux = sizeof(Binario) * pos_segunda;
+                    
+                    if((pos_segunda < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
+                        erro04 = 1;
+                        
+                    else{
+                        
+                        if(pos_primeira == pos_segunda)
+                            erro04 = 2;
+                            
+                        else
+                            dados_binario.trocar(arq_binario04, pos_primeira, pos_segunda);
+                    }
+                }
+                
+                arq_binario04.close();
+            }
+            
+            else{
+                
+                cout << "Não há arquivo convertido" << endl;
+            }
+            return erro04;
+}
+
+// Função para alterar algum campo de escolha de uma posição específica
+void Binario::alterar_campo(fstream& umArquivo, int pos, int opcao){
+	
+	// Variáveis para a execução das operações
+	string name_or_job;
+	name_or_job.clear();
+	int id_or_year = 0;
+	float pay = 0;
+	
+	// Em cada caso, a posição se altera pela soma dos posições anteriores (exceto a primeira);
+	// Nos casos dos tipos int e float, pega-se o novo valor e se sobrescreve no campo desejado;
+	// Nos casos do tipo char, limpa-se o campo e se insere o novo escrito.
+	switch(opcao){
+		
+		case 0:
+			umArquivo.seekg(pos * sizeof(Binario), umArquivo.beg);
+			
+			cout << "Digite o novo id: ";
+			cin >> id_or_year;
+			
+			umArquivo.write((char*)(&id_or_year), sizeof(campo_1_id));
+			break;
+			
+		case 1:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			char nome[sizeof(campo_2_name)];
+			memset(nome, 0, sizeof(nome));
+			
+			cin.ignore();
+			cout << "Digite o novo nome (máx. 41 caracteres): ";
+			getline(cin, name_or_job);
+			
+			if(name_or_job.size() >= sizeof(campo_2_name))
+				cout << "Passou do limite" << endl;
+				
+			else{
+				
+				for(unsigned int i = 0; i < name_or_job.size(); i++)
+					nome[i] = name_or_job[i];
+					
+				memset(campo_2_name, 0, sizeof(campo_2_name));
+				umArquivo.write((char*)(&nome), sizeof(campo_2_name));
+			}
+			break;
+			
+		case 2:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			char trabalho[sizeof(campo_3_job)];
+			memset(trabalho, 0, sizeof(trabalho));
+			
+			cin.ignore();
+			cout << "Digite o novo trabalho(máx. 53 caracteres): ";
+			getline(cin, name_or_job);
+			
+			if(name_or_job.size() >= sizeof(campo_3_job))
+				cout << "Passou do limite" << endl;
+				
+			else{
+				
+				for(unsigned int i = 0; i < name_or_job.size(); i++)
+					trabalho[i] = name_or_job[i];
+					
+				memset(campo_2_name, 0, sizeof(campo_3_job));
+				umArquivo.write((char*)(&trabalho), sizeof(campo_3_job));
+			}
+			break;
+			
+		case 3:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job) ;
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_4_base_pay));
+			
+			break;
+			
+		case 4:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_5_overtime_pay));
+			break;
+			
+		case 5:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_6_other_pay));
+			break;
+			
+		case 6:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_7_benefits));
+			break;
+			
+		case 7:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay) + sizeof(campo_7_benefits);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_8_total_pay));
+			break;
+			
+		case 8:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay) + sizeof(campo_7_benefits)
+			+ sizeof(campo_8_total_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_9_total_pay_benefits));
+			break;
+			
+		case 9:
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay) + sizeof(campo_7_benefits)
+			+ sizeof(campo_8_total_pay) + sizeof(campo_9_total_pay_benefits);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo ano: ";
+			cin >> id_or_year;
+			
+			umArquivo.write((char*)(&id_or_year), sizeof(campo_10_year));
+			break;
+			
+		default:
+			break;
+	}
+}
+
+int Binario::alterar(int erro05){
+	// O arquivo binário é aberto tanto para entrada quanto saída de dados
+	fstream arq_binario("dados_convertidos.bin", ios::binary | ios::in | ios::out);
+	
+	// erro será o retorno do programa, que é tratado no programa principal
+	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
+	
+	if(arq_binario){
+		
+		// É atribuído para tamanho_arquivo_binario quantos bytes há no arquivo binário
+		arq_binario.seekg(0, arq_binario.end);
+		int tamanho_arquivo_binario = arq_binario.tellg();
+		
+		// É criado uma variável do tipo classe Binario para acessar a função de trocar
+		Binario dados_binario;
+		
+		// Variáveis para a execução das operações
+		int pos;
+		long aux;
+		
+		cout << "Escreva a posição que se deseja alterar algum dado: " << endl;
+		cin >> pos;
+		
+		// Tamanho da pos em relação ao início do arquivo binário,
+		// ou seja, representa o byte que a posição de pos começa
+		aux = pos * sizeof(Binario);
+		
+		if((pos < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
+			erro05 = 1;
+			
+		else{
+			
+			int opcao;
+			
+			cout << "Digite o número que representa o campo que se deseja alterar: " << '\n'
+			<< "0. Id" << '\n'
+			<< "1. Nome" << '\n'
+			<< "2. Trabalho" << '\n'
+			<< "3. Pagamento base" << '\n'
+			<< "4. Pagamento extra" << '\n'
+			<< "5. Outros pagamentos" << '\n'
+			<< "6. Pagamento de benefícios" << '\n'
+			<< "7. Pagamento total" << '\n'
+			<< "8. Pagamento total dos benefícios" << '\n'
+			<< "9. Ano" << endl;
+			cin >> opcao;
+			
+			if((cin.fail()) or (!((opcao >= 0) and (opcao <= 9))))
+				erro05 = 2;
+			
+			if(erro05 == 0)
+				dados_binario.alterar_campo(arq_binario, pos, opcao);
+		}
+		
+		arq_binario.close();
+	}
+	
+	else
+		cout << "Não há arquivo convertido" << endl;
+	
+	return erro05;
 }

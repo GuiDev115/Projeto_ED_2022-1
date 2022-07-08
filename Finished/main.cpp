@@ -4,23 +4,26 @@
 #include <stdlib.h>
 
 #include "classes.hpp"
+//Chamada do arquivo auxiliar .hpp na onde escontra-se maior parte do algoritmo do projeto. Desde inserir até a alteração.
+//Construtores e classe estão colocados tambem no .hpp
 
 using namespace std;
 
 int main(){
 
-    int n1;
+    int dado;
 
     Binario *bin = new Binario[1];
 
     cout << "Seja Bem vindo !!!" << endl;
     cout << "Por Favor faca sua escolha para progredir no programa" << endl << endl;
 
-    cout << "1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao" << endl;
+    cout << "1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao || 5 - Alterar Dados || 0 - Sair" << endl;
 
-    cin >> n1;
+    cin >> dado;
 
-    switch(n1){
+    switch(dado){
+
         case 1:
             cout << "Fazer";
         break;
@@ -33,186 +36,33 @@ int main(){
         }
 
         case 3:{
-            // erro será o retorno do programa, que é tratado no programa principal
-	        // Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
-	        int erro03 = 0;
-	
-	        ifstream arq_binario03("dados_convertidos.bin", ios::binary);
-	
-	        if(arq_binario03){
-		
-		        // É atribuído para tamanho_arquivo_binario quantos bytes há no arquivo binário
-		        arq_binario03.seekg(0, arq_binario03.end);
-		        int tamanho_arquivo_binario = arq_binario03.tellg();
-		
-		        // Um ponteiro do tipo classe Binario é criado para ler as linhas desejadas do arquivo binário
-                Binario *leitura = new Binario[1];
-                
-                arq_binario03.seekg(0, arq_binario03.beg);
-                
-                // Variáveis para a execução das operações
-                int inicial_pos = -1;
-                int final_pos = -1;
-                long aux;
-                
-                cout << "Escreva a posição inicial: " << endl;
-                cin >> inicial_pos;
-                
-                // Tamanho da inicial_pos em relação ao início do arquivo binário,
-                // ou seja, representa o byte que a posição de inicial_pos começa
-                aux = sizeof(Binario) * inicial_pos;
-		
-                if((inicial_pos < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
-                    erro03 = 1;
-		
-                else{
-                    
-                    cout << "Escreva a posição final: " << endl;
-                    
-                    cin >> final_pos;
-                    
-                    // Tamanho da final_pos em relação ao início do arquivo binário,
-                    // ou seja, representa o byte que a posição de final_pos começa
-                    aux = sizeof(Binario) * final_pos;
-                    
-                    if((final_pos < inicial_pos) or (final_pos < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
-                        erro03 = 1;
-                    
-                    else{
-                        
-                        // Intervalo de leitura
-                        int intervalo = final_pos - inicial_pos + 1;
-                        
-                        arq_binario03.seekg(inicial_pos * sizeof(Binario), arq_binario03.beg);
-                        
-                        cout << '\n' << "Resultado: " << '\n' << '\n';
-                        
-                        bool primeiro = false;
-                        
-                        do{
-                            // É mostrado ao usuário 100 linhas por vez
-                            int cont = 100;
-                            
-                            // Ou menos que 100 linhas, caso o intervalo restante seja < cont
-                            if(intervalo >= 1 and intervalo < cont)
-                                cont = intervalo;
-                                
-                            // É lido uma linha de informações (um pacote da classe Binario) de cada vez
-                            // Tal pacote é "inserido" no ponteiro leitura para vizualização
-                            for(int i = 0; i < cont; i++, intervalo--){
-                                
-                                arq_binario03.read((char*)(&leitura[0]), sizeof(Binario));
-                                
-                                leitura[0].imprimir(leitura[0]);
-                            }
-                            
-                            cout << "Linhas restantes: " << intervalo << '\n';
-                            cout << "Se desejar ver os resultados do ponto anterior até esse ponto, rode para cima" << endl;
-                            
-                            if(intervalo != 0)
-                                cout << "Pressione enter para continuar. . . ";
-                                
-                            else
-                                cout << "Pressione enter para sair. . . ";
-                            
-                            // Ignora o primeiro enter
-                            if(!primeiro){
-                                
-                                cin.ignore();
-                                
-                                primeiro = true;
-                            }
-                            
-                            // O programa apenas irá continuar/parar após o usuário pressionar enter.
-                            // Tal laço é feito para impedir que a cada caractere que o usuário digite, 
-                            // o programa rode uma vez + quantidade de caracteres inseridos
-                            bool controle = true;
-                            while(controle){
-                                
-                                if(cin.get() == '\n')
-                                    controle = false;
-                            }
-                            
-                            // No linux apenas um clear não basta, tal razão de ter dois comandos iguais
-                            system("clear");
-                            system("clear");
-                            
-                        }while(intervalo != 0);
-                    }
-                }
-                arq_binario03.close();
-                delete[] leitura;
-            }
-            else
-                cout << "Não há arquivo convertido" << endl;
-            return erro03;
+
+            int erro03 = 0;
+            bin -> leitura_por_espaco(erro03);
+
         break;
         }
 
         case 4:{
-            // O arquivo binário é aberto tanto para entrada quanto saída de dados
-	        fstream arq_binario04("dados_convertidos.bin", ios::binary | ios::in | ios::out);
-	
-            // erro será o retorno do programa, que é tratado no programa principal
-            // Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
-            // Se erro = 2, os valores das posições são iguais
+
             int erro04 = 0;
-            
-            if(arq_binario04){
-                
-                // É atribuído para tamanho_arquivo_binario quantos bytes há no arquivo binário
-                arq_binario04.seekg(0, arq_binario04.end);
-                int tamanho_arquivo_binario = arq_binario04.tellg();
-                
-                // É criado uma variável do tipo classe Binario para acessar a função de trocar
-                Binario dados_binario;
-                
-                // Variáveis para a execução das operações
-                int pos_primeira = -1;
-                int pos_segunda = -1;
-                long aux;
-                
-                cout << "Escreva a primeira posição da troca: " << endl;
-                cin >> pos_primeira;
-                
-                // Tamanho da pos_primeira em relação ao início do arquivo binário,
-                // ou seja, representa o byte que a posição de pos_primeira começa
-                aux = pos_primeira * sizeof(Binario);
-                
-                if((pos_primeira < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
-                    erro04 = 1;
-                    
-                else{
-                    
-                    cout << "Escreva a segunda posição da troca: " << endl;
-                    cin >> pos_segunda;
-                    
-                    // Tamanho da pos_segunda em relação ao início do arquivo binário,
-                    // ou seja, representa o byte que a posição de pos_segunda começa
-                    aux = sizeof(Binario) * pos_segunda;
-                    
-                    if((pos_segunda < 0) or (aux > tamanho_arquivo_binario) or (cin.fail()))
-                        erro04 = 1;
-                        
-                    else{
-                        
-                        if(pos_primeira == pos_segunda)
-                            erro04 = 2;
-                            
-                        else
-                            dados_binario.trocar(arq_binario04, pos_primeira, pos_segunda);
-                    }
-                }
-                
-                arq_binario04.close();
-            }
-            
-            else{
-                
-                cout << "Não há arquivo convertido" << endl;
-            }
-            return erro04;
+            bin -> troca_pos(erro04);
+
         break;
         }
+
+        case 5:{
+            int erro05 = 0;
+            bin -> alterar(erro05);
+
+        break;
+        }
+
+        default:{
+            cout << endl <<"Ate mais !!!! Fechando programa...";
+
+            break;
+        }
     }
+    return 0;
 }
