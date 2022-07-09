@@ -32,6 +32,7 @@ int main(){
 			case 1:{
 				bin -> inserir();
 				
+				
 				break;
 			}
 			
