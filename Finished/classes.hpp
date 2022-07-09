@@ -179,8 +179,11 @@ void Binario::leitura_geral(){
 		delete[] leitura;
 	}
 	
-	else
+	else{
 		cout << "Não há arquivo convertido." << endl;
+		cout << "Pressione enter para continuar. . . ";
+                cin.get();
+	}
 }
 
 int Binario::leitura_por_espaco(int erro03){
@@ -293,8 +296,11 @@ int Binario::leitura_por_espaco(int erro03){
 		delete[] leitura;
 	}
 	
-	else
+	else{
 		cout << "Não há arquivo convertido" << endl;
+		cout << "Pressione enter para continuar. . . ";
+                cin.get();
+	}
 		
 	// erro será o retorno do programa, que é tratado no programa principal
 	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
@@ -354,8 +360,10 @@ int Binario::troca_pos(int erro04){
 		arq_binario04.close();
 	}
 	
-	else
+	else{
 		cout << "Não há arquivo convertido" << endl;
+        erro04=-1;
+	}
 		
 	// erro será o retorno do programa, que é tratado no programa principal
 	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
@@ -645,8 +653,11 @@ int Binario::alterar(int erro05){
 		arq_binario05.close();
 	}
 	
-	else
+	else{
 		cout << "Não há arquivo convertido" << endl;
+		cout << "Pressione enter para continuar. . . ";
+                cin.get();
+	}
 		
 	// erro será o retorno do programa, que é tratado no programa principal
 	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
@@ -654,6 +665,8 @@ int Binario::alterar(int erro05){
 }
 
 void Binario::inserir(){
+	
+	system("clear");
 	
 	fstream arq_binario("dados_convertidos.bin", ios::binary | ios::in | ios::out);
 	
@@ -669,8 +682,11 @@ void Binario::inserir(){
 		arq_binario.close();
 	}
 	
-	else
+	else{
 		cout << "Não há arquivo convertido" << endl;
+		cout << "Pressione enter para continuar. . . ";
+		cin.get();
+    }
 }
 
 void Binario::preencher_campo(fstream& umArquivo, int pos){
