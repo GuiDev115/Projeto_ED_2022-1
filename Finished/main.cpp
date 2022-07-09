@@ -16,27 +16,25 @@ int main(){
 	
 	Binario *bin = new Binario[1];
 	
-	cout << "Seja Bem vindo !!!" << endl;
-	cout << "Por Favor faca sua escolha para progredir no programa" << endl << endl;
-	
-	do{
-		
-		cout << "1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao || 5 - Alterar Dados || 0 - Sair" << endl;
+	cout << "||||                   Seja Bem vindo !!!                  ||||" << '\n';
+    cout << "|||| Por Favor faca sua escolha para progredir no programa ||||" << '\n' << '\n';
+
+    do{
+
+        cout << "|| 1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao || 5 - Alterar Dados || 0 - Sair ||" << '\n';
 		getline(cin, dado);
 		
 		if((dado.size() > 1) or (!((dado[0] >= 48) and (dado[0] <= 53))) or (cin.fail()))
 			dado = " ";
 			
 		else
-			
 		
 		switch(int(dado[0] - 48)){
 			
-			case 1:{
-				cout << "Fazer";
-				cin.get();
-				break;
-			}
+			case 1:
+                bin->inserir();
+
+            break;
 			
 			case 2:{
 				bin -> leitura_geral();
