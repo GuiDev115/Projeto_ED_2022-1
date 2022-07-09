@@ -18,26 +18,29 @@ int main(){
 	
 	cout << "||||                   Seja Bem vindo !!!                  ||||" << '\n';
     cout << "|||| Por Favor faca sua escolha para progredir no programa ||||" << '\n' << '\n';
-
-    do{
-
-        cout << "|| 1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao || 5 - Alterar Dados || 0 - Sair ||" << '\n';
+	
+	do{
+		
+		cout << "|| 1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaco || 4 - Trocar Posicao || 5 - Alterar Dados || 0 - Sair ||" << '\n';
 		getline(cin, dado);
 		
 		if((dado.size() > 1) or (!((dado[0] >= 48) and (dado[0] <= 53))) or (cin.fail()))
 			dado = " ";
-			
-		else
 		
 		switch(int(dado[0] - 48)){
 			
-			case 1:
-                bin->inserir();
-
-            break;
+			case 1:{
+				bin -> inserir();
+				
+				break;
+			}
 			
 			case 2:{
 				bin -> leitura_geral();
+				
+				cout << "Fim da aplicação, pressione enter para retornar. . . ";   
+				cin.get();
+				system("clear");
 				
 				break;
 			}
@@ -46,23 +49,31 @@ int main(){
 				int erro03 = 0, result = 0;
 				result = bin -> leitura_por_espaco(erro03);
 				
-				if(result == 1)
+				if(result == 1){
+					
 					cout << "Posição inválida" << endl;
+					cout << "Pressione enter para continuar. . .";
+					cin.ignore();
+					cin.get();
+				}
 				
 				break;
 			}
 			
 			case 4:{
 				int erro04 = 0, result = 0;
-				
 				result = bin -> troca_pos(erro04);
 				
-				if(result == 1)
+				if(result == 0)
+					cout << "Troca feita com sucesso" << endl;
+				
+				else if(result == 1)
 					cout << "Posição inválida" << endl;
 					
 				else if(result == 2)
 					cout << "As posições são iguais, não há porque trocar" << endl;
 					
+				cout << "Pressione enter para continuar. . .";
 				cin.ignore();
 				cin.get();
 				
@@ -71,15 +82,23 @@ int main(){
 			
 			case 5:{
 				int erro05 = 0, result = 0;
-				
 				result = bin -> alterar(erro05);
 				
-				if(result == 1)
+				if(result == 0){
+					
+					cout << "Operação feita com sucesso" << endl;
+				}
+				
+				else if(result == 1){
+					
 					cout << "Posição inválida" << endl;
+					cin.ignore();
+				}
 					
 				else if(result == 2)
 					cout << "O que foi digitado não corresponde com nenhum item da lista" << endl;
 				
+				cout << "Pressione enter para continuar. . .";
 				cin.get();
 				
 				break;
