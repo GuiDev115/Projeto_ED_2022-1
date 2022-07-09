@@ -141,8 +141,13 @@ void Binario::leitura_geral(){
 			cout << "Se desejar ver os resultados do ponto anterior até esse ponto, rode para cima" << endl;
 			
 			if(aux_quant == 0)
-				controle = false;
+			{
+				cout << "Fim da aplicação, pressione enter para retornar. . . ";   
+				cin.get();
 				
+				controle = false;
+			}
+			
 			else{
 				
 				cout << "Se deseja sair da aplicação, pressione q e enter, se não aperte enter para continuar. . . ";
@@ -168,11 +173,8 @@ void Binario::leitura_geral(){
 			}
 			
 			// No linux apenas um clear não basta, tal razão de ter dois comandos iguais
-			if(controle){
-				
-				system("clear");
-				system("clear");
-			}
+			system("clear");
+			system("clear");
 		}while(controle);
 		
 		arq_binario02.close();
@@ -181,8 +183,10 @@ void Binario::leitura_geral(){
 	
 	else{
 		cout << "Não há arquivo convertido." << endl;
-		cout << "Pressione enter para continuar. . . ";
-                cin.get();
+		cout << "Pressione enter para retornar. . . ";
+		cin.get();
+		
+		system("clear");
 	}
 }
 
@@ -298,10 +302,11 @@ int Binario::leitura_por_espaco(int erro03){
 	
 	else{
 		cout << "Não há arquivo convertido" << endl;
-		cout << "Pressione enter para continuar. . . ";
-                cin.get();
+		cout << "Pressione enter para retornar. . . ";
+		cin.get();
+		erro03 = -1;
 	}
-		
+	
 	// erro será o retorno do programa, que é tratado no programa principal
 	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
 	return erro03;
@@ -361,10 +366,12 @@ int Binario::troca_pos(int erro04){
 	}
 	
 	else{
-		cout << "Não há arquivo convertido" << endl;
-        erro04=-1;
-	}
 		
+		cout << "Pressione enter para retornar. . .";
+		cin.get();
+		erro04 = -1;
+	}
+	
 	// erro será o retorno do programa, que é tratado no programa principal
 	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
 	// Se erro = 2, os valores das posições são iguais
@@ -656,9 +663,11 @@ int Binario::alterar(int erro05){
 	else{
 		cout << "Não há arquivo convertido" << endl;
 		cout << "Pressione enter para continuar. . . ";
-                cin.get();
-	}
+		cin.get();
 		
+		erro05 = -1;
+	}
+	
 	// erro será o retorno do programa, que é tratado no programa principal
 	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
 	return erro05;
@@ -684,7 +693,7 @@ void Binario::inserir(){
 	
 	else{
 		cout << "Não há arquivo convertido" << endl;
-		cout << "Pressione enter para continuar. . . ";
+		cout << "Pressione enter para retornar. . . ";
 		cin.get();
     }
 }
