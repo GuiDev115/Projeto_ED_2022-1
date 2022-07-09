@@ -30,6 +30,8 @@ class Binario{
 		int troca_pos(int erro04);
 		int alterar(int erro05);
 		void alterar_campo(fstream& umArquivo, int pos, int opcao);
+		void inserir();
+		void preencher_campo (fstream& umArquivo, int pos);
 };
 
 Binario::Binario(){
@@ -651,4 +653,190 @@ int Binario::alterar(int erro05){
 	// erro será o retorno do programa, que é tratado no programa principal
 	// Se erro = 1, representa que ocorreu erro (o usuário digitou algo incorreto)
 	return erro05;
+}
+
+
+void Binario::inserir(){
+
+	fstream arq_binario("dados_convertidos.bin", ios::binary | ios::in | ios::out);
+
+	if(arq_binario){
+		
+
+		arq_binario.seekg(0, arq_binario.end);
+		int tamanho_arquivo_binario = arq_binario.tellg();
+		
+
+		Binario dados_binario;
+		
+
+		int pos;
+		long aux;
+		
+		cout << "Escreva a posição que se deseja inserir os dados: " << '\n';
+		cin >> pos;
+		
+
+		aux = pos * sizeof(Binario);
+
+			dados_binario.preencher_campo(arq_binario, pos);
+		
+		arq_binario.close();
+
+	}
+}
+
+void Binario::preencher_campo(fstream& umArquivo, int pos){
+	
+	string name_or_job;
+	name_or_job.clear();
+	int id_or_year = 0;
+	float pay = 0;
+	int aux_pos;
+	
+	aux_pos = pos;
+
+			umArquivo.seekg(pos * sizeof(Binario), umArquivo.beg);
+			
+			cout << "Digite o novo id: ";
+			cin >> id_or_year;
+			
+			umArquivo.write((char*)(&id_or_year), sizeof(campo_1_id));
+			
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			char nome[sizeof(campo_2_name)];
+			memset(nome, 0, sizeof(nome));
+
+			cout << "Digite o novo nome (máx. 41 letras): ";
+			cin.ignore();
+			getline(cin, name_or_job);
+			
+			if(name_or_job.size() >= sizeof(campo_2_name))
+				cout << "Passou do limite" << endl;
+				
+			else{
+				
+				for(unsigned int i = 0; i < name_or_job.size(); i++)
+					nome[i] = name_or_job[i];
+					
+				memset(campo_2_name, 0, sizeof(campo_2_name));
+				umArquivo.write((char*)(&nome), sizeof(campo_2_name));
+			}
+
+			//-------------------------------------------------
+
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			char trabalho[sizeof(campo_3_job)];
+			memset(trabalho, 0, sizeof(trabalho));
+			
+			cout << "Digite o novo trabalho (máx. 53 letras): ";
+			getline(cin, name_or_job);
+			
+			if(name_or_job.size() >= sizeof(campo_3_job))
+				cout << "Passou do limite" << endl;
+				
+			else{
+				
+				for(unsigned int i = 0; i < name_or_job.size(); i++)
+					trabalho[i] = name_or_job[i];
+					
+				memset(campo_2_name, 0, sizeof(campo_3_job));
+				umArquivo.write((char*)(&trabalho), sizeof(campo_3_job));
+			}
+
+			//-------------------------------------------------------
+
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job) ;
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_4_base_pay));
+
+			//-------------------------------------------------------
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_5_overtime_pay));
+
+			//------------------------------------------------------------
+
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_6_other_pay));
+			
+			//-----------------------------------------------------------
+
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o novo pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_7_benefits));
+
+			//----------------------------------------------------------------
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay) + sizeof(campo_7_benefits);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_8_total_pay));			
+
+			//-----------------------------------------------------------------
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay) + sizeof(campo_7_benefits)
+			+ sizeof(campo_8_total_pay);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o pagamento: ";
+			cin >> pay;
+			
+			umArquivo.write((char*)(&pay), sizeof(campo_9_total_pay_benefits));
+
+			//---------------------------------------------------------------
+			pos = aux_pos;
+
+			pos = pos * sizeof(Binario) + sizeof(campo_1_id) + sizeof(campo_2_name) + sizeof(campo_3_job)
+			+ sizeof(campo_4_base_pay) + sizeof(campo_5_overtime_pay) + sizeof(campo_6_other_pay) + sizeof(campo_7_benefits)
+			+ sizeof(campo_8_total_pay) + sizeof(campo_9_total_pay_benefits);
+			umArquivo.seekg(pos, umArquivo.beg);
+			
+			cout << "Digite o ano: ";
+			cin >> id_or_year;
+			
+			umArquivo.write((char*)(&id_or_year), sizeof(campo_10_year));
 }
