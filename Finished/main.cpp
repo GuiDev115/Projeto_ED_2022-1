@@ -17,11 +17,11 @@ int main(){
 	Binario *bin = new Binario[1];
 	
 	cout << "||||                   Seja Bem vindo !!!                  ||||" << '\n';
-    cout << "|||| Por Favor faça sua escolha para progredir no programa ||||" << '\n' << '\n';
+	cout << "|||| Por Favor faça sua escolha para progredir no programa ||||" << '\n' << endl;
 	
 	do{
 		
-		cout << "|| 1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaço || 4 - Trocar Posição || 5 - Alterar Dados || 0 - Sair ||" << '\n';
+		cout << "|| 1 - Inserir || 2 - Leitura Geral || 3 - Leitura em determinado espaço || 4 - Trocar Posição || 5 - Alterar Dados || 0 - Sair ||" << endl;
 		getline(cin, dado);
 		
 		if((dado.size() > 1) or (!((dado[0] >= 48) and (dado[0] <= 53))) or (cin.fail()))
@@ -30,7 +30,15 @@ int main(){
 		switch(int(dado[0] - 48)){
 			
 			case 1:{
-				bin -> inserir();
+				int erro01 = 0, result = 0;
+				result = bin -> inserir(erro01);
+				
+				if(result == 1){
+					
+					cout << "Posição inválida" << '\n';
+					cout << "Pressione enter para continuar. . . " << flush;
+					cin.get();
+				}
 				
 				break;
 			}
@@ -47,9 +55,8 @@ int main(){
 				
 				if(result == 1){
 					
-					cout << "Posição inválida" << endl;
-					cout << "Pressione enter para continuar. . .";
-					cin.ignore();
+					cout << "Posição inválida" << '\n';
+					cout << "Pressione enter para continuar. . . " << flush;
 					cin.get();
 				}
 				
@@ -71,8 +78,7 @@ int main(){
 					
 				if((result >= 0 and result <= 2)){
 					
-					cout << "Pressione enter para continuar. . .";
-					cin.ignore();
+					cout << "Pressione enter para continuar. . . " << flush;
 					cin.get();
 				}
 				
@@ -83,15 +89,12 @@ int main(){
 				int erro05 = 0, result = 0;
 				result = bin -> alterar(erro05);
 				
-				if(result == 0){
-					
+				if(result == 0)
 					cout << "Operação feita com sucesso" << endl;
-				}
 				
 				else if(result == 1){
 					
 					cout << "Posição inválida" << endl;
-					cin.ignore();
 				}
 					
 				else if(result == 2)
@@ -99,7 +102,7 @@ int main(){
 				
 				if((result >= 0 and result <= 2)){
 					
-					cout << "Pressione enter para continuar. . .";
+					cout << "Pressione enter para continuar. . . " << flush;
 					cin.get();
 				}
 				
@@ -107,7 +110,7 @@ int main(){
 			}
 			
 			case 0:{
-				cout << endl << "Até mais !!!! Fechando programa...";
+				cout << endl << "Até mais !!!! Fechando programa. . . " << flush;
 				controle = false;
 				break;
 			}
