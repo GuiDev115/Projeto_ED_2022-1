@@ -25,3 +25,9 @@ Outro programa:
 1) imprimir TUDO
 
 Criar um main que puxa tudo
+
+################################################################################################################################################
+
+ORDENAÇÃO EXTERNA
+
+Link do arquivo .csv com alguns ids repetidos e fora de ordem: https://drive.google.com/file/d/1fGrcgVEWqtEsU_Gwp0d7he5VSd23L0Tn/view?usp=sharing
