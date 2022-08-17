@@ -676,7 +676,7 @@ int Binario::leitura_por_espaco(int erro03){
 	
 	system("clear");
 	
-	ifstream arq_binario03("resultado.bin", ios::binary);
+	ifstream arq_binario03("dados_convertidos.bin", ios::binary);
 	
 	if(arq_binario03){
 		
