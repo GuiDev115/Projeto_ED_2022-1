@@ -9,7 +9,6 @@
  * 		https://programacaodescomplicada.wordpress.com/complementar/
  * 		https://www.geeksforgeeks.org/merge-k-sorted-arrays/
  * 		https://www.geeksforgeeks.org/external-sorting/
- * INT_MAX: https://www.digitalocean.com/community/tutorials/int-max-min-c-plus-plus
  * "char_MAX": https://www.codegrepper.com/code-examples/cpp/maximum+char+value+c%2B%2B
  * strcasecmp: https://www.ibm.com/docs/en/aix/7.2?topic=s-strcmp-strncmp-strcasecmp-strcasecmp-l-strncasecmp-strncasecmp-l-strcoll-strcoll-l-subroutine
  * qsort e manipulação de arquivos: obtido pela Introdução aos Algoritmos
@@ -18,7 +17,7 @@
 
 // A ordenação do nome funciona pela função strcasecmp, logo
 // se um nome começar com ", tal nome será considerado 1º
-// Entretanto é case insensitive, ou seja, palavras em MAISCULO e minusculo são diferentes 
+// Também é case insensitive, ou seja, palavras em MAISCULO e minusculo são consideradas iguais
 
 #include <iostream>
 #include <cstring>
@@ -54,7 +53,7 @@ void progressbar(float &progresso){
 	
 	// \r move o cursor para o começo da linha, permitindo a reestruturação da barra
 	// cout.flush() libera um fluxo de saída (nesse caso, a barra de progresso)
-	if(porcento == 99){
+	if(porcento >= 99){
 		
 		cout << "] " << 100 << " %\r";
 		cout.flush();
@@ -89,10 +88,8 @@ class Binario{
 	
 	public:
 		Binario();
-		int particao_nome(int menor, int maior);
-		int particao_id(int menor, int maior);
-		void qsort_id(int menor, int maior);
-		void qsort_nome(int menor, int maior);
+		int particao(int menor, int maior);
+		void qsort(int menor, int maior);
 };
 
 Binario::Binario(){
@@ -110,7 +107,7 @@ Binario::Binario(){
 	campo_11_posicao = -1;
 }
 
-int Binario::particao_nome(int menor, int maior){
+int Binario::particao(int menor, int maior){
 	
 	Binario pivo = this[maior];
 	
@@ -118,81 +115,60 @@ int Binario::particao_nome(int menor, int maior){
 	
 	for(int j = menor; j <= maior; j++){
 		
+		// Se o primeiro nome é menor que o segundo nome, trocam
 		if((strcasecmp(this[j].campo_2_name, pivo.campo_2_name)) < 0){
 			
 			i++;
 			swap(this[i], this[j]);
 		}
-	}
-	
-	swap(this[i + 1], this[maior]);
-	
-	return (i + 1);
-}
-
-int Binario::particao_id(int menor, int maior){
-	
-	Binario pivo = this[maior];
-	
-	int i = (menor - 1);
-	
-	for(int j = menor; j <= maior; j++)
-	{
-		if(this[j].campo_1_id < pivo.campo_1_id)
-		{
+		
+		// Se os dois nomes são iguais, ordena-se pelo id
+		else if(((strcasecmp(this[j].campo_2_name, pivo.campo_2_name)) == 0) and (this[j].campo_1_id < pivo.campo_1_id)){
+			
 			i++;
 			
-			// Tal troca de posições é opcional, pois está ordenando as posições apenas no arquivo temporário (que será apagado)
-			// Ou seja, mudar a posição aqui não altera de fato a posição no arquivo resultado.bin
+			// Tal troca de posições é opcional, pois está trocando as posições apenas no arquivo temporário (que será apagado)
+			// Ou seja, mudar o campo posição aqui não altera de fato a posição no arquivo final
 			/*
 			// Troca de posições
 			int aux_pos = this[i].campo_11_posicao;
 			this[i].campo_11_posicao = this[j].campo_11_posicao;
 			this[j].campo_11_posicao = aux_pos;
 			*/
+			
 			swap(this[i], this[j]);
 		}
 	}
+	
 	/*
 	// Troca de posições
 	int aux_pos = this[i + 1].campo_11_posicao;
 	this[i + 1].campo_11_posicao = this[maior].campo_11_posicao;
 	this[maior].campo_11_posicao = aux_pos;
 	*/
+	
 	swap(this[i + 1], this[maior]);
 	
 	return (i + 1);
 }
 
-void Binario::qsort_nome(int menor, int maior){
+void Binario::qsort(int menor, int maior){
 	
 	if(menor < maior){
 		
-		int pi = particao_nome(menor, maior);
+		int pi = particao(menor, maior);
 		
-		qsort_nome(menor, pi - 1);
-		qsort_nome(pi + 1, maior);
-	}
-}
-
-void Binario::qsort_id(int menor, int maior){
-	
-	if(menor < maior){
-		
-		int pi = particao_id(menor, maior);
-		
-		qsort_id(menor, pi - 1);
-		qsort_id(pi + 1, maior);
+		qsort(menor, pi - 1);
+		qsort(pi + 1, maior);
 	}
 }
 
 class MinHeapNoh{
 	
 	public:
-		Binario bin;	// pacote da classe Binario a ser armazenado
-		int i;	// posicão/id dentre os arquivos temporários que tal pacote é pego
-		int j;	// posicão/id do próximo pacote que será pego do arquivo i
-		void alterarCampoId(){ bin.campo_1_id = INT_MAX; }
+		Binario bin;	// pacote da classe Binario de certo arquivo temporário i a ser armazenado
+		int i;	// posicão/id dentre os arquivos temporários
+		int j;	// posicão/id do próximo pacote que será pego do arquivo temporário i
 		void alterarCampoNome(){ bin.campo_2_name[0] = std::numeric_limits<char>::max(); }
 		void alterarCampoPosicao(int& pos){ bin.campo_11_posicao = pos++; }
 };
@@ -211,18 +187,16 @@ class MinHeap{
 		int tamanho;
 		int esquerdo(int i){ return 2 * i + 1; }
 		int direito(int i){ return 2 * i + 2; }
-		void corrigeDescendo_nome(int i);
-		void corrigeDescendo_id(int i);
+		void corrigeDescendo(int i);
 		
 	public:
-		MinHeap(MinHeapNoh vetor[], int tam, char e);
+		MinHeap(MinHeapNoh vetor[], int tam);
 		~MinHeap();
 		MinHeapNoh getMin(){ return dados[0]; }
-		void inserirMin_id(MinHeapNoh x){ dados[0] = x; corrigeDescendo_id(0); }
-		void inserirMin_nome(MinHeapNoh x){ dados[0] = x; corrigeDescendo_nome(0); }
+		void inserirMin(MinHeapNoh x){ dados[0] = x; corrigeDescendo(0); }
 };
 
-MinHeap::MinHeap(MinHeapNoh vetor[], int tam, char e){
+MinHeap::MinHeap(MinHeapNoh vetor[], int tam){
 	
 	tamanho = tam;
 	
@@ -233,12 +207,8 @@ MinHeap::MinHeap(MinHeapNoh vetor[], int tam, char e){
 	int i = (tamanho - 1) / 2;
 	while(i >= 0){
 		
-		if(e == 'i')
-			corrigeDescendo_id(i);
-			
-		if(e == 'n')
-			corrigeDescendo_nome(i);
-			
+		corrigeDescendo(i);
+		
 		i--;
 	}
 }
@@ -248,47 +218,35 @@ MinHeap::~MinHeap(){
 	delete[] dados;
 }
 
-// Corrige descendo considerando ordenação pelo nome
-void MinHeap::corrigeDescendo_nome(int i){
+// Corrige descendo considerando preferencialmente a ordenação pelo nome, o id é considerado se os nomes forem iguais
+void MinHeap::corrigeDescendo(int i){
 	
 	int esq = esquerdo(i);
 	int dir = direito(i);
 	
 	int menor = i;
 	
+	// O nome da esquerda é menor que o nome do pai
 	if((esq < tamanho) and ((strcasecmp(dados[esq].bin.campo_2_name, dados[i].bin.campo_2_name)) < 0))
 		menor = esq;
 		
+	// O nome da esquerda é igual ao nome do pai, logo ordena-se pelo id
+	else if((esq < tamanho) and ((strcasecmp(dados[esq].bin.campo_2_name, dados[i].bin.campo_2_name)) == 0) and (dados[esq].bin.campo_1_id < dados[i].bin.campo_1_id))
+		menor = esq;
+	
+	// O nome da direita é menor que o nome do pai ou da esquerda
 	if((dir < tamanho) and ((strcasecmp(dados[dir].bin.campo_2_name, dados[menor].bin.campo_2_name)) < 0))
 		menor = dir;
 		
-	if(menor != i){
-		
-		swap(&dados[i], &dados[menor]);
-		
-		corrigeDescendo_nome(menor);
-	}
-}
-
-// Corrige descendo considerando ordenação pelo id
-void MinHeap::corrigeDescendo_id(int i){
-	
-	int esq = esquerdo(i);
-	int dir = direito(i);
-	
-	int menor = i;
-	
-	if((esq < tamanho) and (dados[esq].bin.campo_1_id < dados[i].bin.campo_1_id))
-		menor = esq;
-		
-	if((dir < tamanho) and (dados[dir].bin.campo_1_id < dados[menor].bin.campo_1_id))
+	// O nome da direita é igual ao nome do pai ou da esquerda, logo ordena-se pelo id
+	else if((dir < tamanho) and ((strcasecmp(dados[dir].bin.campo_2_name, dados[menor].bin.campo_2_name)) == 0) and (dados[dir].bin.campo_1_id < dados[menor].bin.campo_1_id))
 		menor = dir;
 		
 	if(menor != i){
 		
 		swap(&dados[i], &dados[menor]);
 		
-		corrigeDescendo_id(menor);
+		corrigeDescendo(menor);
 	}
 }
 
@@ -302,9 +260,7 @@ int quantidadeLinhasArq(ifstream& nome_arq){
 	return quantidade_linhas;
 }
 
-void juntarArquivos(string nome_arq_input,string nome_arq_output, int n, int k, char escolha){
-	
-	ofstream arq_result(nome_arq_output, ios::binary);
+void juntarArquivos(string nome_arq_input,string nome_arq_output, int n, int k){
 	
 	// Cria-se a quantidade de nós heap igual ao número de arquivos temporários
 	// Ou seja, será criado posteriormente um MinHeap com k nós
@@ -335,24 +291,27 @@ void juntarArquivos(string nome_arq_input,string nome_arq_output, int n, int k, 
 	}
 	
 	// Criação do MinHeap com k nohs
-	MinHeap hp(nohs, k, escolha);
+	MinHeap hp(nohs, k);
 	
 	// cont representa quantos arquivos já foram tratados/chegaram ao fim
 	int cont = 0;
 	
-	// pos representa a posição que será inserida no arquivo resultado.bin
+	// pos representa a posição que será inserida no arquivo final e altera o campo posição do próprio
 	// também será usada para avançar na barra de progresso
 	int pos = 0;
 	
 	ifstream arq_entrada(nome_arq_input, ios::binary);
 	
 	// Variáveis para para preencher a barra de progresso
-	float progresso = 0;
-	int porcento = 1;
+	float progresso = 0, porcento = 1;
 	int qtd_linhas_input = quantidadeLinhasArq(arq_entrada);
 	int divisor = qtd_linhas_input / 100;
+	if(divisor == 0)
+		divisor = 1;
 	
 	arq_entrada.close();
+	
+	ofstream arq_result(nome_arq_output, ios::binary);
 	
 	progressbar(progresso);
 	
@@ -363,7 +322,7 @@ void juntarArquivos(string nome_arq_input,string nome_arq_output, int n, int k, 
 		
 		raiz.alterarCampoPosicao(pos);
 		
-		// Insere-se a raiz (menor id ou nome {atual} de todos os arquivos temporários) no arquivo resultado.bin
+		// Insere-se a raiz (menor nome ou id {atual} de todos os arquivos temporários) no arquivo final
 		arq_result.write((char*)(&raiz.bin), sizeof(Binario));
 		
 		nome_arquivo.str("");
@@ -390,29 +349,21 @@ void juntarArquivos(string nome_arq_input,string nome_arq_output, int n, int k, 
 		
 		else{
 			
-			// INT_MAX representa o infinito,
+			// std::numeric_limits<char>::max() representa o "infinito" para um char,
 			// ou seja, como estamos querendo somente os menores valores de cada arquivo temporário
 			// o arquivo atual aberto chegou no seu fim e não há mais pacotes para serem comparados
-			// logo, ele é desconsiderado (fica nos nós mais abaixo do MinHeap principal)
-			if(escolha == 'i')
-				raiz.alterarCampoId();
-				
-			if(escolha == 'n')
-				raiz.alterarCampoNome();
-				
+			// logo, ele é desconsiderado (fica nos nós mais baixos do MinHeap principal)
+			raiz.alterarCampoNome();
+			
 			cont++;
 		}
 		
 		arq_leitura.close();
 		
 		// A raiz atual do MinHeap principal é substituída pelo próximo pacote Binario do atual arquivo temporário "aberto"
-		// O MinHeap é rearranjado (aplica-se o corrige descendo) para que o menor id esteja no topo
-		if(escolha == 'i')
-			hp.inserirMin_id(raiz);
-			
-		if(escolha == 'n')
-			hp.inserirMin_nome(raiz);
-			
+		// O MinHeap é rearranjado (aplica-se o corrige descendo) para que o menor nome ou id esteja no topo
+		hp.inserirMin(raiz);
+		
 		// Progressão da barra
 		if(porcento == (pos / divisor)){
 			
@@ -420,6 +371,9 @@ void juntarArquivos(string nome_arq_input,string nome_arq_output, int n, int k, 
 			porcento++;
 		}
 	}
+	
+	progresso = 100.0;
+	progressbar(progresso);
 	
 	arq_result.close();
 	delete[] leitura;
@@ -435,10 +389,7 @@ void salvarArquivo(string nome, Binario v[], int tam){
 	arq.close();
 }
 
-int criarArquivosOrdenados(string nome_arq_input, int tam_particao, char escolha){
-	
-	if(escolha != 'i' and escolha != 'n')
-		throw runtime_error("Opção inválida!");
+int criarArquivosOrdenados(string nome_arq_input, int tam_particao){
 	
 	ifstream arq_entrada(nome_arq_input, ios::binary);
 	
@@ -453,14 +404,15 @@ int criarArquivosOrdenados(string nome_arq_input, int tam_particao, char escolha
 		// stringstream será usado para criar o nome do arquivo temporário que se deseja abrir
 		stringstream nome_arquivo;
 		// Cria-se um vetor que armazena objetos da classe Binario, com tamanho da partição
-		// No caso desse programa e pelo arquivo escolhido, tal tamanho é sempre 7148
-		// Ou seja, alocamos dinamicamente da memória RAM: 7148 * 132 bytes = 943.536 bytes (cerca de 1MB)
+		// No caso desse programa e pelo arquivo escolhido, tal tamanho é sempre 7148 (357 se considerado k = 1000 + x)
+		// Ou seja, alocamos dinamicamente da memória RAM: 7148 * 132 bytes = 943.536 bytes (cerca de 1MB) (47.177,724 bytes/cerca de 0,05MB se considerado k = 1000 + x)
 		Binario *vetor_bin = new Binario[tam_particao];
 		
 		// A variável ate_linha representa até qual linha será lido o dados_convertidos.bin 
-		// No caso do trabalho: 357407 - (357407 mod 7148) = 357400
+		// No caso do trabalho: 357407 - (357407 mod 7148) = 357400 (considerando k = 50 + x)
 		// Isso foi criado para encher 50 arquivos temporários,
 		// o restante de linhas (7) será armazenado em um arquivo temporário à parte (que terá, logicamente, somente 7 elementos)
+		// Ou: 357407 - (357407 mod 357) = 357357 (considerando k = 1000 + x)
 		int ate_linha = quantidade_linhas - (quantidade_linhas % tam_particao);
 		// cont é um contador de quantos arquivos temporários serão criados, ou seja, cont = k
 		// total dará a posição que se deve inserir no vetor_bin[total] para cada arquivo temporário
@@ -488,11 +440,7 @@ int criarArquivosOrdenados(string nome_arq_input, int tam_particao, char escolha
 				cout << nome_arquivo.str() << " criado com sucesso!" << endl;
 				
 				// QuickSort foi usado como algoritmo de ordenação interno (interno = na memória primária)
-				if(escolha == 'i')
-					vetor_bin->qsort_id(0, total - 1);
-				
-				if(escolha == 'n')
-					vetor_bin->qsort_nome(0, total - 1);
+				vetor_bin->qsort(0, total - 1);
 				
 				// Salva o arquivo temporário
 				salvarArquivo(nome_arquivo.str(), vetor_bin, tam_particao);
@@ -528,12 +476,8 @@ int criarArquivosOrdenados(string nome_arq_input, int tam_particao, char escolha
 			
 			cout << nome_arquivo.str() << " criado com sucesso!" << endl;
 			
-			if(escolha == 'i')
-				vetor_resto_bin->qsort_id(0, total - 1);
-				
-			if(escolha == 'n')
-				vetor_resto_bin->qsort_nome(0, total - 1);
-				
+			vetor_resto_bin->qsort(0, total - 1);
+			
 			salvarArquivo(nome_arquivo.str(), vetor_resto_bin, total);
 			
 			delete[] vetor_resto_bin;
@@ -547,7 +491,7 @@ int criarArquivosOrdenados(string nome_arq_input, int tam_particao, char escolha
 	}
 	
 	else
-		throw runtime_error("Sem arquivo!! Por favor, insira o dados_convertidos.bin gerado pela etapa 1 do grupo.");
+		throw runtime_error("ERRO: arquivo não encontrado");
 }
 
 void externalSort(string nome_arq_input, string nome_arq_output, int tam_particao){
@@ -556,17 +500,12 @@ void externalSort(string nome_arq_input, string nome_arq_output, int tam_partica
 	
 	try{
 		
-		char escolha;
-		
-		cout << "Escolha o modo de ordenação(n para nome ou i para id): " << flush;
-		cin >> escolha;
-		
 		// k é o número de arquivos ordenados
-		k = criarArquivosOrdenados(nome_arq_input, tam_particao, escolha);
+		k = criarArquivosOrdenados(nome_arq_input, tam_particao);
 		
 		cout << "quantidade arquivos temporários: " << k << endl;
 		
-		juntarArquivos(nome_arq_input ,nome_arq_output, tam_particao, k, escolha);
+		juntarArquivos(nome_arq_input ,nome_arq_output, tam_particao, k);
 	}
 	catch(exception& e){
 		cout << e.what() << endl;
@@ -574,14 +513,12 @@ void externalSort(string nome_arq_input, string nome_arq_output, int tam_partica
 	
 	if(k != -1){
 		
+		cout << endl << endl << "Processo ocorreu corretamente!! Aperte Enter para apagar os arquivos temporários. . . " << flush;
+		cin.get();
+		
 		stringstream nome_arquivo;
 		
-		// deleta o arquivo original e os arquivos temporários
-		// Idealmente seria melhor apagar o arquivo original
-		// e, na realidade, deixar o resultado.bin com o mesmo nome que o arquivo original (dados_convertidos.bin)
-		// para posterior inclusão, impressão, etc pelo programa main.cpp da Etapa 1 (provavelmente tal implementação será feita)
-		//remove(nome_arq_input.c_str());
-		
+		// deleta os arquivos temporários
 		for(int i = 0; i < k; i++){
 			
 			nome_arquivo.str("");
@@ -592,14 +529,17 @@ void externalSort(string nome_arq_input, string nome_arq_output, int tam_partica
 			
 			remove(nome_arquivo.str().c_str());
 		}
+		
+		cout << endl << "Por favor, caso queria averiguar o resultado, utilize os programas fornecidos do grupo pela etapa 1. . . " << flush;
+		cin.get();
 	}
 }
 
 int main(){
 	
 	// O arquivo original (dados_convertidos.bin) possui cerca de 50MB
-	// Foi determinado usar o k-way-merge usando MinHeap, sendo k = 50 + 1 (caso sobrem pacotes da classe Binario)
-	// Ou seja, haverá 50 (+ 1) arquivos temporários com 1MB cada (exceto o + 1)
+	// Foi determinado usar o k-way-merge usando quickSort como ordenação interna e a ordenação externa por MinHeap, 
+	// sendo o número de arquivos binários temporários k = 50 + x (x representa o caso de sobrerem pacotes da classe Binario)
 	// Foi feita tal decisão, pois:
 	// Uma analogia poderia ser feita caso o arquivo original tivesse, por exemplo, 50GB
 	// Normalmente um PC moderno razoável possui entre 4GB a 8GB
@@ -607,12 +547,36 @@ int main(){
 	// Tamanho de cada partição: 132 bytes (sizeof da classe Binario) * 357407 (linhas/ids do .csv) = 47.177.724 bytes
 	// 47.177.724 bytes / x bytes = 50 partições, logo x = 943.554,48 bytes (tamanho de cada partição, cerca de 1MB)
 	// 357407 / 50 = 7.148,14
-	int tam_particao = 7148;
+	
+	// Feito analises e testes, como estamos utilizando quickSort para ordenação interna, o fator de complexidade tempo
+	// pode ir para O(n²) para valores de n muito grandes, logo ao realizar 50 partições, cada partição teria cerca de 7148 pacotes Binario
+	// o que poderia ocasionar o pior caso de ordenação (cerca de 50 segundos no PC da UFLA), em contrapartida ao fazer com 1000 partições
+	// teriamos cerca de 357 pacotes Binario no vetor para ordenação, logo o fator de complexidade poderia permancer no O(n log n)
+	// o que deu como resultado, por exemplo 5 segundos (no PC da UFLA)
+	// Nesse caso, temos que cada arquivo temporário possui 47.177,724 bytes (cerca de 0,05MB) o que pela nossa analogia seriam 50MB
+	// Idealmente, seria melhor utilizar o mergeSort internamente, pois ele sempre possui o fator de complexidade tempo O(n log n)
+	// Mas, foi utilizado o quickSort por o mesmo ser mais simples e nosso arquivo não é tão grande (apenas 50MB)
 	
 	string nome_arq_input = "dados_convertidos.bin";
-	string nome_arq_output = "resultado.bin";
+	string nome_arq_output = "dados_convertidos.bin";
 	
-	externalSort(nome_arq_input, nome_arq_output, tam_particao);
+	ifstream arq_original(nome_arq_input, ios::binary);
+	
+	if(arq_original){
+		
+		int quantidade_linhas = quantidadeLinhasArq(arq_original);
+		int tam_particao = quantidade_linhas / 1000;
+		
+		if(tam_particao == 0)
+			tam_particao = 999;
+		
+		arq_original.close();
+		
+		externalSort(nome_arq_input, nome_arq_output, tam_particao);
+	}
+	
+	else
+		cout << "Sem arquivo!! Por favor, insira o dados_convertidos.bin gerado pela etapa 1 do grupo." << endl;
 	
 	return 0;
 }
