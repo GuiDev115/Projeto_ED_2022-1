@@ -260,7 +260,7 @@ int quantidadeLinhasArq(ifstream& nome_arq){
 	return quantidade_linhas;
 }
 
-void juntarArquivos(string nome_arq_input,string nome_arq_output, int n, int k){
+void juntarArquivos(string nome_arq_input, string nome_arq_output, int n, int k){
 	
 	// Cria-se a quantidade de nós heap igual ao número de arquivos temporários
 	// Ou seja, será criado posteriormente um MinHeap com k nós
