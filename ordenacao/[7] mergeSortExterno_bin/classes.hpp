@@ -64,8 +64,8 @@ void Binario::imprimir(Binario& umaLinha){
 	<< umaLinha.campo_7_benefits << '\n'
 	<< umaLinha.campo_8_total_pay << '\n'
 	<< umaLinha.campo_9_total_pay_benefits << '\n'
-	<< umaLinha.campo_10_year << '\n' <<
-	"posição: " << umaLinha.campo_11_posicao << "\n" << endl;
+	<< umaLinha.campo_10_year << '\n'
+	<< "posição: " << umaLinha.campo_11_posicao << "\n" << endl;
 }
 
 // Função para criar um novo bloco/pacote da classe Binario em uma posição específica
