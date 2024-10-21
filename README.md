@@ -1,33 +1,47 @@
-# Projeto_ED_2022-1
+# Tratamento de Arquivos e Ordenação em Memória Secundária
 
-Por ser muito grande o arquivo .csv que estamos trabalhando, ele está disponível aqui: https://drive.google.com/drive/folders/1WzGpaS9SNHUlrDSybl4WntzU7NMdYonE
+## Descrição
 
-Sendo o que foi escolhido: san_francisco_payroll_dataset.csv
+Este projeto implementa um sistema para manipulação de arquivos binários e ordenação externa. Ele permite inserir, visualizar, alterar e trocar registros em um arquivo binário, além de realizar a leitura completa do arquivo.
 
-Para acessar o arquivo binário, basta executar o programa de escrita que está devidamente funcional.
+## Estrutura do Projeto
 
-Pontos importantes:
+- `classes.hpp`: Contém as definições das classes e a maior parte dos algoritmos do projeto, incluindo inserção, alteração e troca de registros.
+- `conversao.cpp`: Implementa funções auxiliares para conversão de dados.
+- `main.cpp`: Contém a função principal que gerencia a interação com o usuário.
 
-1) Por algum motivo, converter de .csv para .bin no windows dá errado, 
-no linux eu consegui ir até certo ponto, mas dava errado o resto por uma implementação que ainda iria fazer
+## Funcionalidades
 
-Resolvido: no windows tem que colocar o ios::binary ao criar o arquivo, para especificar que o arquivo deve ser escrito/lido em binário.
+### Programa Principal (`main.cpp`)
 
-################################################
+1. **Inserir**: Adiciona um elemento em uma posição específica.
+2. **Leitura Geral**: Exibe todos os registros do arquivo.
+3. **Leitura em Determinado Espaço**: Visualiza registros de um ponto a outro.
+4. **Trocar Posição**: Troca dois registros de posição.
+5. **Alterar Dados**: Altera os dados de um registro específico.
+6. **Sair**: Encerra o programa.
 
-Em um programa:
-1) adicionar um elemento em uma posição especifica
-2) vizualizar de um ponto a outro
-3) alterar os dados de certo elemento
-4) trocar 2 registros de posição (criar int pos)
+### Ordenação Externa
 
-Outro programa:
-1) imprimir TUDO
+O projeto também inclui funcionalidades para ordenação externa de arquivos com registros repetidos e fora de ordem.
 
-Criar um main que puxa tudo
+## Como Executar
 
-################################################################################################################################################
+1. Compile o projeto:
+    ```sh
+    g++ -o programa dev/main.cpp dev/conversao.cpp
+    ```
 
-ORDENAÇÃO EXTERNA
+2. Execute o programa:
+    ```sh
+    ./programa
+    ```
 
-Link do arquivo .csv com alguns ids repetidos e fora de ordem: https://drive.google.com/file/d/1fGrcgVEWqtEsU_Gwp0d7he5VSd23L0Tn/view?usp=sharing
+## Arquivos de Dados
+
+- Arquivo .csv disponível: [san_francisco_payroll_dataset.csv](https://drive.google.com/drive/folders/1WzGpaS9SNHUlrDSybl4WntzU7NMdYonE)
+- Arquivo .csv com alguns ids repetidos e fora de ordem: [arquivo com ids repetidos](https://drive.google.com/file/d/1fGrcgVEWqtEsU_Gwp0d7he5VSd23L0Tn/view?usp=sharing)
+
+## Contato
+
+Para mais informações, entre em contato comigo, e se caso queira contribuir ao projeto, envie sua issue/PR.

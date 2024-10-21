@@ -1,9 +1,0 @@
-1) Entre no GitHub
-2) Vá para o Projedo_ED_2022-1
-3) Leia o README.md
-4) Acesse o link (caso não tenha permissão, só mandar)
-5) Baixe o arquivo .csv
-6) Use o programa conversao.cpp para converter o arquivo.csv
-7) Coloque o arquivo gerado dentro da pasta [7] mergeSortExterno_bin
-8) Use os programas dentro dessa pasta para testar o arquivo convertido e ordenação
-Obs: a função 3 (Leitura em determinado espaço) do programa main.cpp está destinada para ler o arquivo ordenado
